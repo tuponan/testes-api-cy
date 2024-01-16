@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 import contrato from '../contracts/produtos.contract'
+import { faker } from '@faker-js/faker';
+
 
 describe('Testes da Funcionalidade Produtos', () => {
     let token
@@ -7,7 +9,7 @@ describe('Testes da Funcionalidade Produtos', () => {
         cy.token('fulano@qa.com', 'teste').then(tkn => { token = tkn })
     });
 
-    it('Deve validar contrato de produtos', () => {
+    it.only('Deve validar contrato de produtos', () => {
         cy.request('produtos').then(response => {
             return contrato.validateAsync(response.body)
         })
