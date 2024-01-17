@@ -4,8 +4,8 @@ const { faker } = require('@faker-js/faker');
 
 describe('Testes da Funcionalidade Usuários', () => {
 
-     it('Deve validar contrato de usuários', () => {
-          cy.request('Produtos').then(response => {
+     it.only('Deve validar contrato de usuário', () => {
+          cy.request('usuarios').then(response => {
                return contrato.validateAsync(response.body)
           })
      });
