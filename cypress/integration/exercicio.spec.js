@@ -4,7 +4,7 @@ const { faker } = require('@faker-js/faker');
 
 describe('Testes da Funcionalidade Usuários', () => {
 
-     it.only('Deve validar contrato de usuário', () => {
+     it('Deve validar contrato de usuário', () => {
           cy.request('usuarios').then(response => {
                return contrato.validateAsync(response.body)
           })
@@ -59,13 +59,13 @@ describe('Testes da Funcionalidade Usuários', () => {
                body: {
                     "quantidade": 1,
                     "usuarios": [
-                      {
-                        "nome": "Fulano da Silva",
-                        "email": "beltrano@qa.com",
-                        "password": "teste",
-                        "administrador": "true",
-                        "_id": "0uxuPY0cbmQhpEz1"
-                      }
+                         {
+                              "nome": "cleiton da Silva",
+                              "email": "kleberson@qa.com.br",
+                              "password": "teste",
+                              "administrador": "true",
+                              "_id": "0uxuPY0cbmQhpEz1"
+                            }
                     ]
                   }
            })
@@ -90,7 +90,7 @@ describe('Testes da Funcionalidade Usuários', () => {
           }) 
      });
 
-     it('Deve deletar um usuário previamente cadastrado', () => {
+     it.only('Deve deletar um usuário previamente cadastrado', () => {
           let emailFaker = faker.internet.email()
           let sobrenomeFaker = faker.name.lastName()
           cy.request({
@@ -101,15 +101,19 @@ describe('Testes da Funcionalidade Usuários', () => {
                     "email": emailFaker,
                     "password": "games",
                     "administrador": "true"
-                  }
+                  },
           })
           .then(response => {
                let id = response.body._id
           cy.request({
                method: 'DELETE',
-               url: 'http://localhost:3000/usuarios/0uxuPY0cbmQhpEz1'
+               url: `usuarios/${id}`,
+          }).then((response) => {
+               expect(response.body.message).to.equal('Registro excluído com sucesso')
+               expect(response.status).to.equal(200)
+               expect(response.duration).to.be.lessThan(20)
           }) 
-
+         
       })
 
      });
