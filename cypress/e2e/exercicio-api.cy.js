@@ -4,6 +4,11 @@ const { faker } = require('@faker-js/faker');
 
 describe('Testes da Funcionalidade Usuários', () => {
 
+     let token
+     before(() => {
+         cy.token('fulano@qa.com', 'teste').then(tkn => { token = tkn })
+     });
+
      it('Deve validar contrato de usuários', () => {
           cy.request('Produtos').then(response => {
                return contrato.validateAsync(response.body)
@@ -52,22 +57,9 @@ describe('Testes da Funcionalidade Usuários', () => {
           }) 
      });
 
-     it('Deve validar um usuário com email inválido', () => {
+     it.only('Deve validar um usuário com email inválido', () => {
           cy.request({
-               method: 'GET',
-               url: 'usuarios',
-               body: {
-                    "quantidade": 1,
-                    "usuarios": [
-                      {
-                        "nome": "Fulano da Silva",
-                        "email": "beltrano@qa.com",
-                        "password": "teste",
-                        "administrador": "true",
-                        "_id": "0uxuPY0cbmQhpEz1"
-                      }
-                    ]
-                  }
+               cy.token('fulano@qa.com', 'teste')
            })
      });
 

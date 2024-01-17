@@ -54,17 +54,18 @@ Cypress.Commands.add('token', (email, senha) => {
 
 
 
- Cypress.Commands.add('cadastrarUsuario', (nome, email, senha) => {
-    let emailFaker = faker.internet.email()
-    let sobrenomeFaker = faker.name.lastName()
+ Cypress.Commands.add('cadastrarUsuario', (token, nome, email, senha, status) => {
+
     cy.request({
         method: 'POST',
         url: 'usuarios',
+        headers: {authorization: token}, 
         body: {
              "nome": nome,
              "email": email,
              "password": senha,
-             "administrador": "true"
-           }
+             "administrador": status
+           },
+           failOnStatusCode: false
    })
  })

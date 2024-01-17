@@ -4,6 +4,11 @@ const { faker } = require('@faker-js/faker');
 
 describe('Testes da Funcionalidade Usuários', () => {
 
+     let token
+     before(() => {
+         cy.token('Lewis650@gmail.com', 'teste').then(tkn => { token = tkn })
+     });
+
      it('Deve validar contrato de usuário', () => {
           cy.request('usuarios').then(response => {
                return contrato.validateAsync(response.body)
@@ -52,23 +57,13 @@ describe('Testes da Funcionalidade Usuários', () => {
           }) 
      });
 
-     it('Deve validar um usuário com email inválido', () => {
-          cy.request({
-               method: 'GET',
-               url: 'usuarios',
-               body: {
-                    "quantidade": 1,
-                    "usuarios": [
-                         {
-                              "nome": "cleiton da Silva",
-                              "email": "kleberson@qa.com.br",
-                              "password": "teste",
-                              "administrador": "true",
-                              "_id": "0uxuPY0cbmQhpEz1"
-                            }
-                    ]
-                  }
-           })
+     it.only('Deve validar um usuário com email inválido', () => {
+          cy.cadastrarUsuario(token, 'Beier', 'Lewis650@gmail.com', 'teste', 'true')
+      
+          .then((response) => {
+               expect(response.status).to.equal(400)
+               //expect(response.body.message).to.equal('Cadastro realizado com sucesso')
+          })
      });
 
      it('Deve editar um usuário previamente cadastrado', () => {
@@ -90,7 +85,7 @@ describe('Testes da Funcionalidade Usuários', () => {
           }) 
      });
 
-     it.only('Deve deletar um usuário previamente cadastrado', () => {
+     it('Deve deletar um usuário previamente cadastrado', () => {
           let emailFaker = faker.internet.email()
           let sobrenomeFaker = faker.name.lastName()
           cy.request({
